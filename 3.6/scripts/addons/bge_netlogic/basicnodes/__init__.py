@@ -4442,6 +4442,7 @@ class LogicNodeOSCFilter(NLActionNode):
         
         # Filter settings
         self.inputs.new(NLBooleanSocket.bl_idname, "Filter Repeats")
+        self.inputs.new(NLBooleanSocket.bl_idname, "Vector Mode")
         
         self.inputs.new(NLFloatFieldSocket.bl_idname, "Repeat Threshold")
         self.inputs[-1].value = 0.001
@@ -4464,12 +4465,48 @@ class LogicNodeOSCFilter(NLActionNode):
         return "ULOSCFilter"
 
     def get_input_sockets_field_names(self):
-        return ["queue_length", "messages_per_frame", "filter_repeats", "repeat_threshold", "drop_overflow","default_address", "address_filter"]
+        return ["queue_length", "messages_per_frame", "filter_repeats", "vector_mode", "repeat_threshold", "drop_overflow","default_address", "address_filter"]
 
     def get_output_socket_varnames(self):
         return ["FILTER_CONFIG"]
 
 _nodes.append(LogicNodeOSCFilter)
+
+
+class LogicNodeOSCListener(NLActionNode):
+    bl_idname = "LogicNodeOSCListener"
+    bl_label = "OSC Listener"
+    bl_icon = 'OUTLINER_OB_SPEAKER'
+    nl_category = "Network"
+    nl_module = 'actions'
+
+    def init(self, context):
+        NLActionNode.init(self, context)
+        
+        # Inputs
+        self.inputs.new(NLParameterSocket.bl_idname, "Messages")
+        
+        self.inputs.new(NLQuotedStringFieldSocket.bl_idname, "Address Patterns")
+        self.inputs[-1].value = "/osc/*"
+        
+        self.inputs.new(NLQuotedStringFieldSocket.bl_idname, "Common Prefix")
+        self.inputs[-1].value = ""
+        
+        # Outputs
+        self.outputs.new(NLConditionSocket.bl_idname, "Any Received")
+        self.outputs.new(NLParameterSocket.bl_idname, "Messages")
+
+    def get_netlogic_class_name(self):
+        return "ULOSCListener"
+
+    def get_input_sockets_field_names(self):
+        return ["messages", "address_patterns", "common_prefix"]
+
+    def get_output_socket_varnames(self):
+        return ["ANY_RECEIVED", "MESSAGES"]
+
+
+_nodes.append(LogicNodeOSCListener)
 
 
 

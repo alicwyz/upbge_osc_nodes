@@ -909,8 +909,10 @@ class OSCMenu(bpy.types.Menu):
         insertNode(layout, "LogicNodeSetupOSCServer", "Setup OSC Server")
         insertNode(layout, "LogicNodeReceiveOSCMessage", "Receive OSC Message")
         insertNode(layout, "LogicNodeSendOSC", "Send OSC Message")
+        layout.separator()
         insertNode(layout, "LogicNodeOSCSequencer", "OSC Sequencer")
         insertNode(layout, "LogicNodeOSCFilter", "Filter OSC")
+        insertNode(layout, "LogicNodeOSCListener", "OSC Listener")
 
 
 _items.append(OSCMenu)
