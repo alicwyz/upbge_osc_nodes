@@ -78,4 +78,4 @@ After installation, restart UPBGE and you should see the new OSC nodes available
 
 ---
 
-These new OSC nodes make UPBGE a **powerful tool for interactive media, live performances, and game development**.**Enjoy real-time OSC communication in UPBGE!** 🚀
+These new OSC nodes make UPBGE a **powerful tool for interactive media, live performances, and game development**. **Enjoy real-time OSC communication in UPBGE!** 🚀
