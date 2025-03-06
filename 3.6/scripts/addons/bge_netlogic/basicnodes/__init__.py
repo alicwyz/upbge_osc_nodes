@@ -4315,8 +4315,8 @@ class LogicNodeSetupOSCServer(NLActionNode):
         self.inputs.new(NLPositiveIntegerFieldSocket.bl_idname, "Port")
         self.inputs[-1].value = 9001
         
-        self.inputs.new(NLQuotedStringFieldSocket.bl_idname, "Default Address")
-        self.inputs[-1].value = "/osc"
+        # New filter configuration input
+        self.inputs.new(NLParameterSocket.bl_idname, "Filters")
         
         self.inputs.new(NLBooleanSocket.bl_idname, "Debug")
         
@@ -4327,7 +4327,7 @@ class LogicNodeSetupOSCServer(NLActionNode):
         return "ULSetupOSCServer"
 
     def get_input_sockets_field_names(self):
-        return ["condition_start", "condition_stop", "ip", "port", "default_address", "debug"]
+        return ["condition_start", "condition_stop", "ip", "port", "filters", "debug"]
 
     def get_output_socket_varnames(self):
         return ["MESSAGES"]
@@ -4351,7 +4351,7 @@ class LogicNodeReceiveOSCMessage(NLActionNode):
         self.inputs.new(NLQuotedStringFieldSocket.bl_idname, "OSC Address")
         self.inputs[-1].value = "/osc"
         
-        self.inputs.new(NLBooleanSocket.bl_idname, "Filter repeating values")
+        #self.inputs.new(NLBooleanSocket.bl_idname, "Filter repeating values")
         
         self.outputs.new(NLConditionSocket.bl_idname, "Received")
         self.outputs.new(NLParameterSocket.bl_idname, "Value")
@@ -4360,7 +4360,7 @@ class LogicNodeReceiveOSCMessage(NLActionNode):
         return "ULReceiveOSCMessage"
 
     def get_input_sockets_field_names(self):
-        return ["messages", "osc_address", "ignore_repeats"]
+        return ["messages", "osc_address"]
 
     def get_output_socket_varnames(self):
         return ["RECEIVED", "VALUE"]
@@ -4422,6 +4422,54 @@ class LogicNodeOSCSequencer(NLActionNode):
 
 _nodes.append(LogicNodeOSCSequencer)
 
+
+class LogicNodeOSCFilter(NLActionNode):
+    bl_idname = "LogicNodeOSCFilter"
+    bl_label = "Filter OSC"
+    bl_icon = 'FILTER'
+    nl_category = "Network"
+    nl_module = 'actions'
+
+    def init(self, context):
+        NLActionNode.init(self, context)
+        
+        # Queue settings
+        self.inputs.new(NLPositiveIntegerFieldSocket.bl_idname, "Queue Length")
+        self.inputs[-1].value = 100
+        
+        self.inputs.new(NLPositiveIntegerFieldSocket.bl_idname, "Messages Per Frame")
+        self.inputs[-1].value = 10
+        
+        # Filter settings
+        self.inputs.new(NLBooleanSocket.bl_idname, "Filter Repeats")
+        
+        self.inputs.new(NLFloatFieldSocket.bl_idname, "Repeat Threshold")
+        self.inputs[-1].value = 0.001
+        
+        self.inputs.new(NLBooleanSocket.bl_idname, "Drop Overflow")
+        self.inputs[-1].value = True
+        
+         # Basic OSC address setting (moved from Setup OSC Server)
+        self.inputs.new(NLQuotedStringFieldSocket.bl_idname, "Default Address")
+        self.inputs[-1].value = "/osc"
+        
+        # Address filter
+        self.inputs.new(NLQuotedStringFieldSocket.bl_idname, "Address Filter")
+        self.inputs[-1].value = ""
+        
+        # Output parameter socket with all filter settings
+        self.outputs.new(NLParameterSocket.bl_idname, "Filter Config")
+
+    def get_netlogic_class_name(self):
+        return "ULOSCFilter"
+
+    def get_input_sockets_field_names(self):
+        return ["queue_length", "messages_per_frame", "filter_repeats", "repeat_threshold", "drop_overflow","default_address", "address_filter"]
+
+    def get_output_socket_varnames(self):
+        return ["FILTER_CONFIG"]
+
+_nodes.append(LogicNodeOSCFilter)
 
 
 

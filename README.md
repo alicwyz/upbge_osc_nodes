@@ -30,7 +30,7 @@ After installation, restart UPBGE and you should see the new OSC nodes available
   - `Stop` (Condition) → Stops the server.
   - `IP` (String) → IP address to listen on.
   - `Port` (Integer) → Port to listen on.
-  - `Default Address` (String) → Filters messages starting with this address.
+  - `Filters` (Parameter) → Filtering options for advanced users.
   - `Debug` (Condition) → Prints received messages to the console.
 - **Outputs:**
   - `Messages` (Parameter) → Dictionary containing received OSC messages.
@@ -38,11 +38,9 @@ After installation, restart UPBGE and you should see the new OSC nodes available
 #### 🔹 **OSC Receive Node** (`Receive OSC Message`)
 
 - Extracts a specific OSC message from the server’s dictionary.
-- Can ignore repeated values to optimize performance.
 - **Inputs:**
   - `Messages` (Parameter) → Dictionary from `Setup OSC Server`.
   - `OSC Address` (String) → The address to filter.
-  - `Ignore Repeats` (Condition) → If enabled, ignores repeated values.
 - **Outputs:**
   - `Received` (Condition) → Triggers when a new message is received.
   - `Value` (Parameter) → The value of the received OSC message.
@@ -70,6 +68,25 @@ After installation, restart UPBGE and you should see the new OSC nodes available
   - `Speed` (Float) → Controls playback speed (default = 1.0).
   - `Max Duration` (Float) → Limits the recording length (default = 5s).
   - `Messages` (Parameter) → Dictionary of received OSC messages.
+- **Outputs:**
+  - `Recording` (Condition) → True while recording.
+  - `Playing` (Condition) → True while playing back.
+  - `Finished Playing` (Condition) → Triggers when playback ends.
+  - `Message` (Parameter) → Outputs the replayed OSC message.
+
+#### 🔹 **OSC Filter Node** (`Setup OSC Server`)
+
+- Adds some filtering options for advanced users.
+- Changes how the OSC server is initialized and processes messages.
+- Can help with performance and address filtering.
+- **Inputs:**
+  - `Queue Lenght`(Integer) → Length of queue for received messages (default = 100).
+  - `Messages per Frame`(Integer) → Message batch processing size (default = 10).
+  - `Filter Repeats`(Boolean) → Enables filtering of repeated values.
+  - `Repeat Threshold`(Float) → Sets the threshold to check for repetions.
+  - `Drop Overflow`(Boolean) → Determines whether to block or drop messages when the queue is full.
+  - `Address Filter`(String) → Determines which address the server initially subscribes to at the dispatcher level.
+  - `Address Filter`(String) → Allows filtering messages by OSC address patterns (including wildcards)
 - **Outputs:**
   - `Recording` (Condition) → True while recording.
   - `Playing` (Condition) → True while playing back.

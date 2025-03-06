@@ -33,6 +33,7 @@ def draw_add_menu(self, context):
     layout.separator()
     layout.menu("LN_MT_file_menu", text="File", icon="RIGHTARROW_THIN")
     layout.menu("LN_MT_network_menu", text="Network", icon="RIGHTARROW_THIN")
+    layout.menu("LN_MT_osc_menu", text="OSC", icon="RIGHTARROW_THIN")
     layout.menu("LN_MT_data_menu", text="Data", icon="RIGHTARROW_THIN")
     layout.separator()
     layout.menu("LN_MT_render_menu", text="Render", icon="RIGHTARROW_THIN")
@@ -896,6 +897,23 @@ class NetworkMenu(bpy.types.Menu):
 
 
 _items.append(NetworkMenu)
+
+#OSC MENU HERE
+
+class OSCMenu(bpy.types.Menu):
+    bl_idname = "LN_MT_osc_menu"
+    bl_label = "OSC Menu"
+
+    def draw(self, context):
+        layout = self.layout
+        insertNode(layout, "LogicNodeSetupOSCServer", "Setup OSC Server")
+        insertNode(layout, "LogicNodeReceiveOSCMessage", "Receive OSC Message")
+        insertNode(layout, "LogicNodeSendOSC", "Send OSC Message")
+        insertNode(layout, "LogicNodeOSCSequencer", "OSC Sequencer")
+        insertNode(layout, "LogicNodeOSCFilter", "Filter OSC")
+
+
+_items.append(OSCMenu)
 
 
 class DataMenu(bpy.types.Menu):
