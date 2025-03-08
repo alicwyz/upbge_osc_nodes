@@ -138,9 +138,7 @@ class ULSetupOSCServer(ULActionNode):
                 for addr in addresses:
                     addr = addr.strip()
                     if '*' in addr:
-                        escaped_addr = re.escape(addr)  # Escape special regex characters
-                        escaped_addr = escaped_addr.replace(r'\*', '.*')  # Replace escaped '*' with '.*'
-                        regex_pattern = re.compile(f"^{escaped_addr}$")  # Now correctly formatted
+                        regex_pattern = re.compile(f"^{re.escape(addr).replace('\\*', '.*')}$")
                         self._valid_patterns.append(regex_pattern)
                     else:
                         self._valid_addresses.add(addr)  # Exact match optimization
@@ -158,13 +156,13 @@ class ULSetupOSCServer(ULActionNode):
                 print(f"OSC Server started at {self.get_input(self.ip)}:{self.get_input(self.port)}")
                 if self.get_input(self.filters):
                     config = self._filter_config
-                    debug_config = f"Default address: {config['default_address']}"
+                    debug_config = f"Default address: {config["default_address"]}"
                     debug_config += f", Queue: {config['queue_length']}, Msgs/frame: {config['messages_per_frame']}"
                     
                     if config["filter_repeats"]:
-                        debug_config += f", Filtering repeats (threshold: {config['repeat_threshold']}, vector mode: {config['vector_mode']} )"
+                        debug_config += f", Filtering repeats (threshold: {config['repeat_threshold']}, vector mode: {config["vector_mode"]} )"
                     
-                    if config["address_filter"]:
+                    if config["adress_filter"]:
                         debug_config += f", Advanced filter: {config['address_filter']}"
                         
                     print(debug_config)      
